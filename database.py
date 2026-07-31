@@ -17,6 +17,10 @@ try:
 
     db = client.get_default_database()
 
+    # Collections
+    users_collection = db["users"]
+    medicines_collection = db["medicines"]
+
     print("MongoDB Connected Successfully")
 
 except ConnectionFailure as error:
