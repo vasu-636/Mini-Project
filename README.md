@@ -17,7 +17,7 @@ The system helps warehouse administrators to:
 - Generate reports
 - Maintain secure user authentication
 
-This project follows a professional **MVC (Model-View-Controller)** architecture and is being developed in milestones.
+The project follows the **MVC (Model-View-Controller)** architecture and is being developed milestone by milestone using professional software development practices.
 
 ---
 
@@ -85,41 +85,25 @@ MWIMS/
            MongoDB Database
 ```
 
-This project follows the **MVC (Model-View-Controller)** architecture to maintain clean code, scalability, and separation of responsibilities.
+The project follows the **MVC (Model-View-Controller)** architecture to maintain clean code, modularity, and separation of responsibilities.
 
 ---
 
-# ✅ Milestone 1 — Day 1 Progress
+# ✅ Milestone 1 Progress
 
-## Completed Tasks
+## ✔ Day 1 - Backend Foundation
 
-### 1. Project Planning
+### Completed
 
-- Defined the overall project architecture.
-- Selected MVC design pattern.
-- Planned folder structure for scalable development.
-
----
-
-### 2. Configuration Module (`config.py`)
-
-Implemented:
+#### Configuration (`config.py`)
 
 - MongoDB URI
-- Security configurations
 - bcrypt Salt Rounds
-
-Example:
-
-```python
-MONGO_URI = "mongodb://localhost:27017/MWIMS"
-
-SALT_ROUNDS = 12
-```
+- Project Configuration
 
 ---
 
-### 3. Database Module (`database.py`)
+#### Database (`database.py`)
 
 Implemented:
 
@@ -127,61 +111,82 @@ Implemented:
 - Database Connection
 - Connection Verification using `ping`
 - Connection Timeout
+- Database Initialization
 - Collection Initialization
 
 Collections:
 
 - users
 - medicines
-- categories
-- suppliers
-- activity_logs
 
 ---
 
-### 4. Password Utility (`utils/hash.py`)
+#### Password Utility (`utils/hash.py`)
 
 Implemented:
 
 - Password Hashing
 - Password Verification
-- bcrypt Integration
 - Input Validation
-- Custom Exceptions
-- Type Hinting
-- Google Style Documentation
+- bcrypt Integration
+- Type Hints
+- Google Style Docstrings
 
 ---
 
-### 5. Development Standards
+## ✔ Day 2 - User Management Foundation
 
-Established coding standards for the entire project:
+### User Model (`models/user_model.py`)
 
-- MVC Architecture
-- PEP 8 Naming Conventions
-- Type Hinting
+Implemented:
+
+- Create User
+- Get User by Username
+- Get User by Email
+- Get User by ID
+- Update User
+- Delete User
+- Username Exists
+- Email Exists
+
+Features:
+
+- CRUD Operations
+- MongoDB Queries using PyMongo
+- ObjectId Handling
+- Timestamp Management
+- Exception Handling
+- Type Hints
 - Google Style Docstrings
-- Custom Exceptions
-- Single Responsibility Principle (SRP)
-- Fail Fast Principle
-- Clean Folder Organization
+
+---
+
+### Database Initialization (`initialize_db.py`)
+
+Implemented:
+
+- Default Admin Creation
+- Duplicate Admin Check
+- Password Hashing
+- MongoDB Insertion
+- Safe Initialization
 
 ---
 
 # 📚 Python Concepts Learned
 
-- Modules
-- Packages
+- Project Structure
+- MVC Architecture
+- Modules & Packages
 - Imports
 - Type Hints
-- Custom Exceptions
-- UTF-8 Encoding
-- Password Hashing
-- bcrypt
-- MongoDB Connection using PyMongo
-- Connection Timeout
-- Database Ping
-- Project Architecture (MVC)
+- Google Style Docstrings
+- Exception Handling
+- PyMongo CRUD Operations
+- MongoDB ObjectId
+- MongoDB Collections
+- bcrypt Password Hashing
+- Timestamp Management
 
 ---
 
@@ -190,19 +195,21 @@ Established coding standards for the entire project:
 Implemented:
 
 - bcrypt Password Hashing
-- Configurable Salt Rounds
 - Password Verification
-- Input Validation
+- Configurable Salt Rounds
+- Default Admin Initialization
+- Duplicate Username Prevention
+- Duplicate Email Prevention
 
 ---
 
-# 🚧 Upcoming Tasks (Day 2)
+# 🚧 Upcoming Tasks (Day 3)
 
-- Create `user_model.py`
-- Create `medicine_model.py`
-- Implement CRUD operations for users
-- Database queries using PyMongo
-- Create default admin account (`initialize_db.py`)
+- Authentication Controller (`auth_controller.py`)
+- Login Business Logic
+- User Authentication
+- Password Verification
+- Login Validation
 
 ---
 
@@ -214,27 +221,64 @@ Implemented:
 - Inventory Management
 - Expiry Alerts
 - Low Stock Alerts
-- Search by Batch Number
-- Search by Warehouse Location
-- CSV Report Generation
-- Dashboard
+- Search System
+- Warehouse Location Management
+- Report Generation
 - Tkinter GUI
-- Barcode/QR Code Integration (Future)
+- Barcode/QR Code Support (Future)
 
 ---
 
 # 📈 Development Status
 
-| Milestone | Status |
-|-----------|--------|
+| Module | Status |
+|---------|--------|
 | Project Planning | ✅ Completed |
 | Folder Structure | ✅ Completed |
 | Configuration | ✅ Completed |
-| MongoDB Connection | ✅ Completed |
+| Database Connection | ✅ Completed |
 | Password Hashing | ✅ Completed |
-| Models | ⏳ In Progress |
-| Controllers | ⏳ Pending |
-| Views | ⏳ Pending |
+| User Model | ✅ Completed |
+| Database Initialization | ✅ Completed |
+| Authentication Controller | ⏳ Pending |
+| Authentication View | ⏳ Pending |
+| Medicine Model | ⏳ Pending |
+| Medicine CRUD | ⏳ Pending |
+| Inventory Management | ⏳ Pending |
 | Tkinter GUI | ⏳ Pending |
+
+---
+
+# 👥 Team Workflow
+
+### Branch Strategy
+
+- `main` → Production branch
+- `vasu-dev` → Vasu
+- `hassan-dev` → Hassan
+- `yash-dev` → Yash
+
+### Git Workflow
+
+1. Pull the latest changes from your branch.
+2. Develop new features on your personal branch.
+3. Commit with meaningful messages.
+4. Push only to your personal branch.
+5. Only the repository owner merges changes into `main`.
+
+---
+
+# 📅 Current Progress
+
+**Current Milestone:** Milestone 1
+
+**Completed:**
+
+- ✅ Day 1
+- ✅ Day 2
+
+**Next Milestone:**
+
+- Authentication Controller (Day 3)
 
 ---
