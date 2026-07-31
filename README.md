@@ -238,13 +238,3 @@ Implemented:
 | Tkinter GUI | ⏳ Pending |
 
 ---
-
-# 👨‍💻 Author
-
-**Vasu Patel**
-
-Bachelor of Engineering (Electronics & Communication)
-
-Medicine Warehouse Inventory Management System (MWIMS)
-
-Professional Python Desktop Application using MongoDB
