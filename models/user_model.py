@@ -6,7 +6,9 @@ It is responsible only for database interaction and does not
 contain business logic such as authentication or password hashing.
 """
 
-from datetime import datetime
+from __future__ import annotations
+
+from datetime import datetime, timezone
 from typing import Any
 
 from bson import ObjectId
@@ -16,21 +18,32 @@ from pymongo.errors import PyMongoError
 from database import users_collection
 
 
+def _to_object_id(id_val: str | ObjectId) -> ObjectId | None:
+    """Helper to convert string or ObjectId into a valid ObjectId instance."""
+    if isinstance(id_val, ObjectId):
+        return id_val
+    if isinstance(id_val, str):
+        try:
+            return ObjectId(id_val.strip())
+        except (InvalidId, TypeError):
+            return None
+    return None
+
+
 def create_user(user_data: dict[str, Any]) -> ObjectId | None:
     """
-    Create a new user.
+    Create a new user document in MongoDB.
 
     Args:
         user_data: Dictionary containing user information.
 
     Returns:
-        ObjectId | None:
-            The inserted user's ObjectId if successful,
-            otherwise None.
+        ObjectId | None: Inserted ObjectId if successful, otherwise None.
     """
     try:
-        user_data["created_at"] = datetime.utcnow()
-        user_data["updated_at"] = datetime.utcnow()
+        now = datetime.now(timezone.utc)
+        user_data["created_at"] = now
+        user_data["updated_at"] = now
 
         result = users_collection.insert_one(user_data)
         return result.inserted_id
@@ -40,125 +53,81 @@ def create_user(user_data: dict[str, Any]) -> ObjectId | None:
 
 
 def get_user_by_username(username: str) -> dict[str, Any] | None:
-    """
-    Retrieve a user by username.
-
-    Args:
-        username: Username to search.
-
-    Returns:
-        User document if found, otherwise None.
-    """
+    """Retrieve a user document by username."""
+    if not isinstance(username, str) or not username.strip():
+        return None
     try:
-        return users_collection.find_one({"username": username})
-
+        return users_collection.find_one({"username": username.strip()})
     except PyMongoError:
         return None
 
 
 def get_user_by_email(email: str) -> dict[str, Any] | None:
-    """
-    Retrieve a user by email.
-
-    Args:
-        email: Email address.
-
-    Returns:
-        User document if found, otherwise None.
-    """
+    """Retrieve a user document by email address."""
+    if not isinstance(email, str) or not email.strip():
+        return None
     try:
-        return users_collection.find_one({"email": email})
-
+        return users_collection.find_one({"email": email.strip().lower()})
     except PyMongoError:
         return None
 
 
-def get_user_by_id(user_id: str) -> dict[str, Any] | None:
-    """
-    Retrieve a user using MongoDB ObjectId.
-
-    Args:
-        user_id: User ObjectId as string.
-
-    Returns:
-        User document if found, otherwise None.
-    """
+def get_user_by_id(user_id: str | ObjectId) -> dict[str, Any] | None:
+    """Retrieve a user document using MongoDB ObjectId or string."""
+    obj_id = _to_object_id(user_id)
+    if not obj_id:
+        return None
     try:
-        return users_collection.find_one(
-            {"_id": ObjectId(user_id)}
-        )
-
-    except (InvalidId, PyMongoError):
+        return users_collection.find_one({"_id": obj_id})
+    except PyMongoError:
         return None
 
 
-def update_user(user_id: str, update_data: dict[str, Any]) -> bool:
-    """
-    Update an existing user.
-
-    Args:
-        user_id: User ObjectId.
-        update_data: Fields to update.
-
-    Returns:
-        True if updated successfully, otherwise False.
-    """
+def get_all_users() -> list[dict[str, Any]]:
+    """Retrieve all user documents."""
     try:
-        update_data["updated_at"] = datetime.utcnow()
+        return list(users_collection.find())
+    except PyMongoError:
+        return []
+
+
+def update_user(user_id: str | ObjectId, update_data: dict[str, Any]) -> bool:
+    """Update an existing user document."""
+    obj_id = _to_object_id(user_id)
+    if not obj_id or not update_data:
+        return False
+
+    try:
+        update_data["updated_at"] = datetime.now(timezone.utc)
 
         result = users_collection.update_one(
-            {"_id": ObjectId(user_id)},
+            {"_id": obj_id},
             {"$set": update_data},
         )
-
         return result.modified_count > 0
 
-    except (InvalidId, PyMongoError):
+    except PyMongoError:
         return False
 
 
-def delete_user(user_id: str) -> bool:
-    """
-    Delete a user.
+def delete_user(user_id: str | ObjectId) -> bool:
+    """Delete a user document by ID."""
+    obj_id = _to_object_id(user_id)
+    if not obj_id:
+        return False
 
-    Args:
-        user_id: User ObjectId.
-
-    Returns:
-        True if deleted successfully, otherwise False.
-    """
     try:
-        result = users_collection.delete_one(
-            {"_id": ObjectId(user_id)}
-        )
-
+        result = users_collection.delete_one({"_id": obj_id})
         return result.deleted_count > 0
-
-    except (InvalidId, PyMongoError):
+    except PyMongoError:
         return False
 
 
 def username_exists(username: str) -> bool:
-    """
-    Check whether a username already exists.
-
-    Args:
-        username: Username to check.
-
-    Returns:
-        True if username exists, otherwise False.
-    """
+    """Check whether a username already exists."""
     return get_user_by_username(username) is not None
 
 
 def email_exists(email: str) -> bool:
-    """
-    Check whether an email already exists.
-
-    Args:
-        email: Email to check.
-
-    Returns:
-        True if email exists, otherwise False.
-    """
+    """Check whether an email already exists."""
     return get_user_by_email(email) is not None

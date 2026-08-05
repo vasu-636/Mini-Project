@@ -1,0 +1,15 @@
+# Python Bytecode Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+env/
+venv/
+
+# Environment / Secret Files
+.env
+
+# Database / Log files
+*.log

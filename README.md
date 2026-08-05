@@ -1,284 +1,109 @@
 # 💊 Medicine Warehouse Inventory Management System (MWIMS)
 
-A professional desktop application built with **Python**, **MongoDB**, and **Tkinter** for managing medicine inventory in warehouses.
+A professional backend architecture built with **Python 3.13+**, **MongoDB**, **PyMongo**, and **bcrypt** for managing medicine warehouse inventory, stock alerts, locations, user RBAC, and report generation.
 
 ---
 
-# 📌 Project Overview
+## 📌 Project Overview
 
-The Medicine Warehouse Inventory Management System (MWIMS) is designed to automate warehouse operations by replacing manual inventory management with a secure and efficient software solution.
+The Medicine Warehouse Inventory Management System (MWIMS) automates warehouse operations with a secure, modular, and scalable software solution following the **MVC (Model-View-Controller)** architecture.
 
-The system helps warehouse administrators to:
-
-- Manage medicine inventory
-- Track expiry dates
-- Monitor stock levels
-- Locate medicines quickly
-- Generate reports
-- Maintain secure user authentication
-
-The project follows the **MVC (Model-View-Controller)** architecture and is being developed milestone by milestone using professional software development practices.
+Key features provided by the backend:
+- **Secure Authentication & RBAC**: Password hashing using `bcrypt`, session state context, and Role-Based Access Control (`admin` vs `staff`).
+- **User Management**: User creation, email/username validation, account activation/deactivation, and security logging.
+- **Medicine Management**: Full CRUD for medicine records, unique batch tracking, category & type constraints.
+- **Warehouse Location Allocation**: Tracking physical stock allocation across Racks, Shelves, and Cabinets.
+- **Inventory Tracking & Stock Movements**: Atomic stock adjustments, shortage calculations, and stock audits.
+- **Real-Time Alert Engine**: Low stock alerts and expiry warning calculations ($N$ days before expiration).
+- **Multi-Field Search**: Case-insensitive regex search across medicine names, batch numbers, categories, and locations.
+- **Reporting & CSV Export**: Analytical summary reports, audit activity logs, and CSV data export.
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
 | Technology | Purpose |
-|------------|---------|
-| Python 3.13+ | Backend Development |
-| MongoDB | Database |
-| PyMongo | MongoDB Driver |
-| bcrypt | Password Hashing |
-| Tkinter | Desktop GUI (Upcoming) |
+|---|---|
+| **Python 3.13+** | Primary Backend Language |
+| **MongoDB** | NoSQL Database |
+| **PyMongo (4.13.2)** | MongoDB Python Driver |
+| **bcrypt (4.3.0)** | Password Hashing |
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 MWIMS/
 │
-├── app.py
-├── config.py
-├── database.py
-├── initialize_db.py
+├── app.py                    # Main terminal application entry point
+├── config.py                 # MongoDB URI & application settings
+├── database.py               # PyMongo connection & collection handles
+├── initialize_db.py          # Database index creation & admin seeder
+├── initialize_database.py    # Database setup wrapper
 │
-├── controllers/
+├── controllers/              # Business Orchestration Controllers
 │   ├── auth_controller.py
-│   └── medicine_controller.py
+│   ├── medicine_controller.py
+│   ├── inventory_controller.py
+│   ├── warehouse_controller.py
+│   └── report_controller.py
 │
-├── models/
+├── models/                   # Pure Database Query Models (PyMongo)
 │   ├── user_model.py
-│   └── medicine_model.py
+│   ├── medicine_model.py
+│   ├── inventory_model.py
+│   ├── warehouse_model.py
+│   └── report_model.py
 │
-├── views/
-│   ├── auth_view.py
-│   ├── menu_view.py
-│   └── medicine_view.py
+├── middlewares/              # Access Control & Exception Wrappers
+│   ├── auth_middleware.py
+│   ├── role_middleware.py
+│   ├── validation_middleware.py
+│   └── exception_handler.py
 │
-├── utils/
-│   ├── hash.py
+├── services/                 # Domain Services & Analytics
+│   ├── alert_service.py
+│   ├── inventory_service.py
+│   ├── report_service.py
+│   └── search_service.py
+│
+├── utils/                    # Reusable Utilities & Helpers
+│   ├── constants.py
+│   ├── logger.py
 │   ├── validator.py
-│   └── helpers.py
+│   ├── helpers.py
+│   ├── hash.py
+│   └── csv_export.py
 │
-├── requirements.txt
-└── README.md
+├── requirements.txt          # Python Package Dependencies
+└── README.md                 # System Documentation
 ```
 
 ---
 
-# 🏗 Architecture
+## 🚀 How to Run the Application in Terminal
 
-```text
-                User
-                  │
-                  ▼
-             View Layer
-                  │
-                  ▼
-         Controller Layer
-                  │
-                  ▼
-            Model Layer
-                  │
-                  ▼
-           MongoDB Database
+### 1. Prerequisites
+- Python 3.13+ installed
+- MongoDB Community Server running locally at `mongodb://localhost:27017`
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
 ```
 
-The project follows the **MVC (Model-View-Controller)** architecture to maintain clean code, modularity, and separation of responsibilities.
+### 3. Run Application via Terminal
 
----
+To start the interactive terminal interface:
 
-# ✅ Milestone 1 Progress
+```bash
+py -3 app.py
+```
 
-## ✔ Day 1 - Backend Foundation
+Or initialize the database directly:
 
-### Completed
-
-#### Configuration (`config.py`)
-
-- MongoDB URI
-- bcrypt Salt Rounds
-- Project Configuration
-
----
-
-#### Database (`database.py`)
-
-Implemented:
-
-- MongoDB Client
-- Database Connection
-- Connection Verification using `ping`
-- Connection Timeout
-- Database Initialization
-- Collection Initialization
-
-Collections:
-
-- users
-- medicines
-
----
-
-#### Password Utility (`utils/hash.py`)
-
-Implemented:
-
-- Password Hashing
-- Password Verification
-- Input Validation
-- bcrypt Integration
-- Type Hints
-- Google Style Docstrings
-
----
-
-## ✔ Day 2 - User Management Foundation
-
-### User Model (`models/user_model.py`)
-
-Implemented:
-
-- Create User
-- Get User by Username
-- Get User by Email
-- Get User by ID
-- Update User
-- Delete User
-- Username Exists
-- Email Exists
-
-Features:
-
-- CRUD Operations
-- MongoDB Queries using PyMongo
-- ObjectId Handling
-- Timestamp Management
-- Exception Handling
-- Type Hints
-- Google Style Docstrings
-
----
-
-### Database Initialization (`initialize_db.py`)
-
-Implemented:
-
-- Default Admin Creation
-- Duplicate Admin Check
-- Password Hashing
-- MongoDB Insertion
-- Safe Initialization
-
----
-
-# 📚 Python Concepts Learned
-
-- Project Structure
-- MVC Architecture
-- Modules & Packages
-- Imports
-- Type Hints
-- Google Style Docstrings
-- Exception Handling
-- PyMongo CRUD Operations
-- MongoDB ObjectId
-- MongoDB Collections
-- bcrypt Password Hashing
-- Timestamp Management
-
----
-
-# 🔐 Security Features
-
-Implemented:
-
-- bcrypt Password Hashing
-- Password Verification
-- Configurable Salt Rounds
-- Default Admin Initialization
-- Duplicate Username Prevention
-- Duplicate Email Prevention
-
----
-
-# 🚧 Upcoming Tasks (Day 3)
-
-- Authentication Controller (`auth_controller.py`)
-- Login Business Logic
-- User Authentication
-- Password Verification
-- Login Validation
-
----
-
-# 🎯 Long-Term Features
-
-- User Authentication
-- Role-Based Access Control
-- Medicine CRUD
-- Inventory Management
-- Expiry Alerts
-- Low Stock Alerts
-- Search System
-- Warehouse Location Management
-- Report Generation
-- Tkinter GUI
-- Barcode/QR Code Support (Future)
-
----
-
-# 📈 Development Status
-
-| Module | Status |
-|---------|--------|
-| Project Planning | ✅ Completed |
-| Folder Structure | ✅ Completed |
-| Configuration | ✅ Completed |
-| Database Connection | ✅ Completed |
-| Password Hashing | ✅ Completed |
-| User Model | ✅ Completed |
-| Database Initialization | ✅ Completed |
-| Authentication Controller | ⏳ Pending |
-| Authentication View | ⏳ Pending |
-| Medicine Model | ⏳ Pending |
-| Medicine CRUD | ⏳ Pending |
-| Inventory Management | ⏳ Pending |
-| Tkinter GUI | ⏳ Pending |
-
----
-
-# 👥 Team Workflow
-
-### Branch Strategy
-
-- `main` → Production branch
-- `vasu-dev` → Vasu
-- `hassan-dev` → Hassan
-- `yash-dev` → Yash
-
-### Git Workflow
-
-1. Pull the latest changes from your branch.
-2. Develop new features on your personal branch.
-3. Commit with meaningful messages.
-4. Push only to your personal branch.
-5. Only the repository owner merges changes into `main`.
-
----
-
-# 📅 Current Progress
-
-**Current Milestone:** Milestone 1
-
-**Completed:**
-
-- ✅ Day 1
-- ✅ Day 2
-
-**Next Milestone:**
-
-- Authentication Controller (Day 3)
-
----
+```bash
+py -3 initialize_db.py
+```
