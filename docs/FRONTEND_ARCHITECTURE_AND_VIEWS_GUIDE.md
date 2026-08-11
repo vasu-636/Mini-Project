@@ -812,12 +812,12 @@ Calls `auth_controller.register_user(...)` which performs full backend validatio
 
 ### User Table
 
-The treeview shows: Username · Email · Role · Status · User ID (full, for deactivation reference).
+The treeview displays: Username · Email · Role · Status (the database `_id` is hidden from the UI for security and stored internally in item `iid` for deactivation reference).
 
 Inactive users are displayed with the `"inactive"` tag (dimmed text):
 ```python
 tag = "evenrow" if is_active else "inactive"
-self._tree.insert("", "end", values=row, tags=(tag,))
+self._tree.insert("", "end", iid=user_id, values=row, tags=(tag,))
 ```
 
 ### Deactivation Guard

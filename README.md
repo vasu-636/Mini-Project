@@ -236,7 +236,7 @@ MWIMS implements three user roles with different permission levels:
 
 | # | Screen | Access | Description |
 |---|--------|--------|-------------|
-| 1 | **Login** | All | Dark-themed login card with brand banner |
+| 1 | **Login & Registration** | All | Dark-themed login & user self-registration card with brand banner |
 | 2 | **Dashboard** | All | Live metric cards + quick-action buttons |
 | 3 | **Medicines** | All (write: Admin/Staff) | Full CRUD with treeview, search, Add/Edit dialog |
 | 4 | **Inventory** | All (write: Admin/Staff) | Stock ±δ, transfer location, inventory table |

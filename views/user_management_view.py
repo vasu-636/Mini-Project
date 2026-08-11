@@ -159,9 +159,9 @@ class UserManagementView(tk.Frame):
     and deactivate capabilities.
     """
 
-    _COLS   = ("username", "email", "role", "status", "id")
-    _HEADS  = ("Username", "Email", "Role", "Status", "User ID")
-    _WIDTHS = (130, 210, 80, 80, 200)
+    _COLS   = ("username", "email", "role", "status")
+    _HEADS  = ("Username", "Email", "Role", "Status")
+    _WIDTHS = (180, 260, 100, 100)
 
     def __init__(self, parent: tk.Widget, user: dict[str, Any]) -> None:
         super().__init__(parent, bg=BG_DARK)
@@ -264,15 +264,15 @@ class UserManagementView(tk.Frame):
         for u in source:
             is_active = u.get("is_active", True)
             status    = "Active" if is_active else "Deactivated"
+            user_id   = str(u.get("_id", ""))
             row = (
                 u.get("username", ""),
                 u.get("email", ""),
                 u.get("role", "").upper(),
                 status,
-                str(u.get("_id", "")),
             )
             tag = ("evenrow" if is_active else "inactive")
-            self._tree.insert("", "end", values=row, tags=(tag,))
+            self._tree.insert("", "end", iid=user_id, values=row, tags=(tag,))
 
     # ──────────────────────── ACTIONS ─────────────────────────────────
 
@@ -284,10 +284,9 @@ class UserManagementView(tk.Frame):
         if not sel:
             messagebox.showwarning("No Selection", "Please select a user row.", parent=self)
             return None
-        values = self._tree.item(sel[0], "values")
-        user_id = values[4] if values else None
+        selected_id = sel[0]
         for u in self._all_users:
-            if str(u.get("_id", "")) == user_id:
+            if str(u.get("_id", "")) == selected_id:
                 return u
         return None
 
